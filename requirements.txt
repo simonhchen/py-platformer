@@ -1,0 +1,2 @@
+pymunk==5.6.0
+PyOpenGL==3.1.5
