@@ -102,3 +102,29 @@ class Respawn(Component):
     def respawn(self):
         self.gameobject.velocity = 0, 0
         self.gameobject.position = self.spawn_position
+
+
+class PlayerMovement(Component):
+    __slots__ = ['can_jump']
+
+    def __init__(self):
+        self.can_jump = False
+
+    def update(self, dt):
+        d = Input.get_key(K_RIGHT) - Input.get_key(K_LEFT)
+        self.gameobject.move(d * 5 * dt, 0)
+        if Input.get_key(K_UP) and self.can_jump:
+            self.can_jump = False
+            self.gameobject.move(0, 8)
+
+    def on_collide(self, other, contacts):
+        self.can_jump |= any(c.normal.y < 0 for c in contacts)
+
+
+class Player(GameObject):
+    def __init__(self, x, y):
+        super(Player, self).__init__(x, y)
+        self.add_components(Sphere(1, (1, 1, 1, 1)),
+                            PlayerMovement(), Respawn(),
+                            Shooter(), Camera(10, 20),
+                            SphereCollider(1, is_static=False))
