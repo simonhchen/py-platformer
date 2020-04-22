@@ -41,6 +41,7 @@ class Renderable(Component):
     def render(self):
         pass
 
+
 class Light(Renderable):
     def __init__(self, light_id, color=(1, 1, 1, 0),
                  constant_att=0.1, linear_att=0.05):
@@ -60,6 +61,22 @@ class Light(Renderable):
         glLightfv(light_id, GL_DIFFUSE, self.color)
         glLightfv(light_id, GL_CONSTANT_ATTENUATION, self.constant_att)
         glLightfv(light_id, GL_LINEAR_ATTENUATION, self.linear_att)
+
+
+class Camera(Component):
+    instance = None
+
+    def __init__(self, dy, dz):
+        self.dy = dy
+        self.dz = dz
+        Camera.instance = self
+
+    def render(self):
+        pos = self.gameobject.position
+        glLoadIdentity()
+        gluLookAt(pos[0], self.dy, self.dz,
+                  pos[0], pos[1], pos[2],
+                  0, 1, 0)
 
 
 class Cube(Renderable):
