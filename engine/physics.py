@@ -1,5 +1,6 @@
 import pymunk
 
+
 def coll_handler(_, arbiter):
     if len(arbiter.shapes) == 2:
         obj1 = arbiter.shapes[0].gameobject
@@ -35,6 +36,33 @@ class Rigidbody(Component):
             space.add(shape)
         else:
             space.add(self.gameobject._body, shape)
+
+
+class BoxCollider(Rigidbody):
+    __slots__ = ['size']
+
+    def __init__(self, widith, height, mass=1, is_static=True):
+        super(BoxCollider, self).__init__(mass, is_static)
+        self.size = widith, height
+
+    def start(self):
+        super(BoxCollider, self).start()
+        body = self.gameobject._body
+        shape = pymunk.Poly.create_box(body, self.size)
+        self.add_shape_to_space(shape)
+
+
+class SphereCollider(Rigidbody):
+    __slots__ = ['radius']
+
+    def __init__(self, radius, mass=1, is_static=True):
+        self.radius = radius
+
+    def start(self):
+        super(SphereCollider, self).start()
+        body = self.gameobject._body
+        shape = pymunk.Circle(body, self.radius)
+        self.add_shape_to_space(shape)
 
 
 class Physics(object):
