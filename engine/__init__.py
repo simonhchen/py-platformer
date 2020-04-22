@@ -1,11 +1,15 @@
-import pymunk as pm
+import sys
 
 import pygame
 
-
+import pymunk as pm
 
 from OpenGL.GL import *
 from OpenGL.GLU import *
+
+from .components import *
+from .input_manager import Input
+from .physics import BoxCollider, SphereCollider, Physics, Rigidbody
 
 
 class GameObject(object):
