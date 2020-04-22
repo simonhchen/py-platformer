@@ -1,5 +1,12 @@
 import pymunk as pm
 
+import pygame
+
+
+
+from OpenGL.GL import *
+from OpenGL.GLU import *
+
 
 class GameObject(object):
     instances = []
@@ -86,3 +93,51 @@ class GameObject(object):
     def collide(self, other, contacts):
         for component in self.components:
             component.on_collide(other, contacts)
+
+
+class Game(object):
+    def __init__(self, caption, width=800, height=600):
+        self.caption = caption
+        self.width = width
+        self.height = height
+        self.fps = 60
+
+    def mainloop(self):
+        self.setup()
+        clock = pygame.time.Clock()
+        while not Input.quit_flag:
+            dt = clock.tick(self.fps)
+            dt /= 1000
+            Physics.step(dt)
+            self.update(dt)
+            self.render()
+        pygame.quit()
+        sys.exit()
+
+    def setup(self):
+        pygame.init()
+        pygame.display.set_mode((self.width, self.height),
+                                pygame.OPENGL | pygame.DOUBLEBUF)
+        pygame.display.set_caption(self.caption)
+        glEnable(GL_LIGHTING)
+        glEnable(GL_COLOR_MATERIAL)
+        glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE)
+        glEnable(GL_DEPTH_TEST)
+        glClearColor(0.5, 0.7, 1, 1)
+        glMatrixMode(GL_PROJECTION)
+        aspect = self.width / self.height
+        gluPerspective(45, aspect, 1, 100)
+        glMatrixMode(GL_MODELVIEW)
+
+    def update(self, dt):
+        Input.update()
+        for gameobject in GameObject.instances:
+            gameobject.update(dt)
+
+    def render(self):
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        if Camera.instance is not None:
+            Camera.instance.render()
+        for gameobject in GameObject.instances:
+            gameobject.redner()
+        pygame.display.flip()
