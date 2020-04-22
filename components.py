@@ -40,3 +40,62 @@ class Renderable(Component):
 
     def render(self):
         pass
+
+class Light(Renderable):
+    def __init__(self, light_id, color=(1, 1, 1, 0),
+                 constant_att=0.1, linear_att=0.05):
+        self.light_id = light_id
+        self.enabled = False
+        self.color = color
+        self.constant_att = constant_att
+        self.linear_att = linear_att
+
+    def render(self):
+        if not self.enabled:
+            self.enabled = True
+            glEnable(self.light_id)
+        light_id = self.light_id
+        position = self.gameobject.position
+        glLightfv(light_id, GL_POSITION, position)
+        glLightfv(light_id, GL_DIFFUSE, self.color)
+        glLightfv(light_id, GL_CONSTANT_ATTENUATION, self.constant_att)
+        glLightfv(light_id, GL_LINEAR_ATTENUATION, self.linear_att)
+
+
+class Cube(Renderable):
+    sides = ((0, 1, 2, 3), (3, 2, 7, 6), (6, 7, 5, 4),
+             (4, 5, 1, 0), (1, 5, 7, 2), (4, 0, 3, 6))
+
+    normals = ((0, 0, -1), (-1, 0, 0), (0, 0, 1),
+               (1, 0, 0), (0, 1, 0), (0, -1, 0))
+
+    def __init__(self, color, size):
+        super(Cube, self).__init__(color)
+        x, y, z = map(lambda i: i/2, size)
+        self.vertices = (
+            (x, -y, -z), (x, y, -z),
+            (-x, y,-z), (-x, -y, -z),
+            (x, -y, z), (x, y, z),
+            (-x, -y, z), (-x, y,  z))
+
+    def _render(self):
+        glBegin(GL_QUADS)
+        for i, side in enumerate(Cube.sides):
+            glNormal3fv(Cube.normals[i])
+            for v in side:
+                glVertex3fv(self.vertices[v])
+        glEnd()
+
+
+class Sphere(Renderable):
+    slices = 40
+    stacks = 40
+
+    def __init__(self, radius, color):
+        super(Sphere, self).__init__(color)
+        self.radius = radius
+        self.quadratic = gluNewQuadric()
+
+    def _render(self):
+        gluSphere(self.quadratic, self.radius,
+                  Sphere.slices, Sphere.stacks)
