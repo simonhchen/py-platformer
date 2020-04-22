@@ -128,3 +128,30 @@ class Player(GameObject):
                             PlayerMovement(), Respawn(),
                             Shooter(), Camera(10, 20),
                             SphereCollider(1, is_static=False))
+
+
+class PyPlatformer(Game):
+    def __init__(self):
+        super(PyPlatformer, self).__init__('PyPlatformer')
+        self.player = Player(-2, 0)
+        self.light = GameObject(0, 10, 0)
+        self.light.add_components(Light(GL_LIGHT0))
+        self.ground = [
+            # Platform 1
+            Platform(3, -2, 30, 1),
+            Platform(-11, 3, 2, 0),
+            Platform(8, 0, 2, 3),
+            # Platform 2 & 3
+            Platform(23, 0, 6, 1),
+            Platform(40, 2, 24, 1),
+            # Platform 4 & 5
+            Platform(60, 3, 8, 1),
+            Platform(84, 4, 26, 1)
+        ]
+        self.pickup = Pickup(60, 5)
+        self.enemies = [Enemy(40, 4), Enemy(90, 6)]
+
+
+if __name__ == '__main__':
+    game = PyPlatformer()
+    game.mainloop()
