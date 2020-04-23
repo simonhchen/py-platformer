@@ -5,7 +5,7 @@ from .components import Component
 __all__ = ['BoxCollider', 'SphereCollider', 'Physics', 'Rigidbody']
 
 
-def coll_handler(_, arbiter):
+def coll_handler(arbiter, space, _):
     if len(arbiter.shapes) == 2:
         obj1 = arbiter.shapes[0].gameobject
         obj2 = arbiter.shapes[1].gameobject
