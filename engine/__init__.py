@@ -63,7 +63,7 @@ class GameObject(object):
 
     def add_components(self, *components):
         for component in components:
-            self.add_components(component)
+            self.add_component(component)
 
     def add_component(self, component):
         self.components.append(component)
