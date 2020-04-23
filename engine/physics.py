@@ -5,10 +5,11 @@ from .components import Component
 __all__ = ['BoxCollider', 'SphereCollider', 'Physics', 'Rigidbody']
 
 
-def coll_handler(_, arbiter):
+def coll_handler(arbiter, space, _):
     if len(arbiter.shapes) == 2:
         obj1 = arbiter.shapes[0].gameobject
         obj2 = arbiter.shapes[1].gameobject
+
         obj1.collide(obj2, arbiter.contacts)
         obj2.collide(obj1, arbiter.contacts)
     return True
@@ -16,7 +17,8 @@ def coll_handler(_, arbiter):
 
 space = pymunk.Space()
 space.gravity = 0, -10
-space.set_defualt_collision_handler(coll_handler)
+h = space.add_default_collision_handler()
+h.begin = coll_handler
 
 
 class Rigidbody(Component):
@@ -46,9 +48,9 @@ class Rigidbody(Component):
 class BoxCollider(Rigidbody):
     __slots__ = ['size']
 
-    def __init__(self, widith, height, mass=1, is_static=True):
+    def __init__(self, width, height, mass=1, is_static=True):
         super(BoxCollider, self).__init__(mass, is_static)
-        self.size = widith, height
+        self.size = width, height
 
     def start(self):
         super(BoxCollider, self).start()
