@@ -145,5 +145,5 @@ class Game(object):
         if Camera.instance is not None:
             Camera.instance.render()
         for gameobject in GameObject.instances:
-            gameobject.redner()
+            gameobject.render()
         pygame.display.flip()
