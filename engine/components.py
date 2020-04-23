@@ -1,6 +1,8 @@
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
+__all__ = ['Component', 'Renderable', 'Cube', 'Sphere', 'Light', 'Camera']
+
 
 class Component(object):
     __slots__ = ['gameobject']
@@ -26,7 +28,7 @@ class Renderable(Component):
         rot = self.gameobject.rotation
         scale = self.gameobject.scale
         glPushMatrix()
-        glTranslatef()
+        glTranslatef(*pos)
         if rot != (0, 0, 0):
             glRotatef(rot[0], 1, 0, 0)
             glRotatef(rot[1], 0, 1, 0)
@@ -35,10 +37,10 @@ class Renderable(Component):
             glScalef(*scale)
         if self.color is not None:
             glColor4f(*self.color)
-        self.render()
+        self._render()
         glPopMatrix()
 
-    def render(self):
+    def _render(self):
         pass
 
 
@@ -88,12 +90,12 @@ class Cube(Renderable):
 
     def __init__(self, color, size):
         super(Cube, self).__init__(color)
-        x, y, z = map(lambda i: i/2, size)
+        x, y, z = map(lambda i: i / 2, size)
         self.vertices = (
             (x, -y, -z), (x, y, -z),
-            (-x, y,-z), (-x, -y, -z),
+            (-x, y, -z), (-x, -y, -z),
             (x, -y, z), (x, y, z),
-            (-x, -y, z), (-x, y,  z))
+            (-x, -y, z), (-x, y, z))
 
     def _render(self):
         glBegin(GL_QUADS)
