@@ -122,8 +122,8 @@ class Game(object):
 
     def setup(self):
         pygame.init()
-        pygame.display.set_mode((self.width, self.height),
-                                pygame.OPENGL | pygame.DOUBLEBUF)
+        size = self.width, self.height
+        self.screen = pygame.display.set_mode(size, pygame.OPENGL | pygame.DOUBLEBUF)
         pygame.display.set_caption(self.caption)
         glEnable(GL_LIGHTING)
         glEnable(GL_COLOR_MATERIAL)
