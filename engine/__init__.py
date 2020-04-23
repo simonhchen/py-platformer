@@ -56,10 +56,10 @@ class GameObject(object):
         self._body.velocity = vel
 
     def move(self, x, y):
-        self._body.apply_impulse((x, y))
+        self._body.apply_impulse_at_local_point((x, y))
 
     def apply_force(self, x, y):
-        self._body.apply_force((x, y))
+        self._body.apply_force_at_local_point((x, y))
 
     def add_components(self, *components):
         for component in components:
