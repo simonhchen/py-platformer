@@ -37,7 +37,7 @@ class Disappear(Component):
 
 
 class Shoot(Component):
-    def on_collid(self, other, contacts):
+    def on_collide(self, other, contacts):
         self.gameobject.remove()
 
 
