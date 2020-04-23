@@ -37,6 +37,7 @@ class Rigidbody(Component):
             self.gameobject._body = body
 
     def add_shape_to_space(self, shape):
+        shape.collision_type = 1
         self.gameobject._shape = shape
         shape.gameobject = self.gameobject
         if self.is_static:
@@ -63,6 +64,7 @@ class SphereCollider(Rigidbody):
     __slots__ = ['radius']
 
     def __init__(self, radius, mass=1, is_static=True):
+        super(SphereCollider, self).__init__(mass, is_static)
         self.radius = radius
 
     def start(self):
@@ -76,6 +78,7 @@ class Physics(object):
     @classmethod
     def step(cls, dt):
         space.step(dt)
+
     @classmethod
     def remove(cls, body):
         space.remove(body)
