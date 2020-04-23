@@ -93,6 +93,7 @@ class GameObject(object):
             self.remove_component(component)
         if self._shape is not None:
             Physics.remove(self._shape)
+        GameObject.instances.remove(self)
 
     def collide(self, other, contacts):
         for component in self.components:
@@ -105,6 +106,7 @@ class Game(object):
         self.width = width
         self.height = height
         self.fps = 60
+        self.screen = None
 
     def mainloop(self):
         self.setup()
